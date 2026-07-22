@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OneWin — Monthly Performance Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0B0E; --card:#111420; --card2:#151a28;
+    --line:#232a3a; --text:#eef2f8; --muted:#8A93A6; --muted2:#5c6472;
+    --blue:#1479FF; --blue2:#4DA3FF; --green:#37d67a;
+    --head:'Sora',sans-serif; --body:'Inter',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:radial-gradient(1200px 720px at 50% -220px,#0e1a33 0%,var(--bg) 55%) fixed;
+    color:var(--text); font-family:var(--body);
+    -webkit-font-smoothing:antialiased; line-height:1.55; padding-bottom:70px;
+    position:relative; overflow-x:hidden;
+  }
+  h1,h2,h3,h4,.head{font-family:var(--head)}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
+
+  /* signature faded wordmark watermarks */
+  .wm{position:absolute;font-family:var(--head);font-weight:800;letter-spacing:-.04em;
+    color:rgba(255,255,255,.035);pointer-events:none;user-select:none;z-index:0;line-height:.8}
+  .wm-1{top:340px;right:-2vw;font-size:20vw}
+  .wm-2{bottom:120px;left:-2vw;font-size:16vw}
+
+  /* ---------- LOGO LOCKUP ---------- */
+  .lockup{display:inline-flex;align-items:center;gap:12px;margin-bottom:22px}
+  .wordmark{font-family:var(--head);font-weight:800;font-size:1.55rem;letter-spacing:-.02em;color:var(--blue)}
+  .lockup .x{color:var(--muted);font-weight:600;font-size:.95rem;letter-spacing:.02em}
+
+  /* ---------- HERO ---------- */
+  header.hero{text-align:center;padding:56px 22px 20px}
+  header.hero h1{font-size:clamp(1.7rem,4.5vw,2.9rem);font-weight:800;letter-spacing:-.02em;line-height:1.1}
+  header.hero h1 span{color:var(--blue2)}
+  header.hero .sub{color:var(--muted);margin-top:12px;font-size:1.02rem}
+
+  .bignum{margin:36px auto 6px;font-family:var(--head);font-size:clamp(3.4rem,13vw,7rem);font-weight:800;line-height:.95;
+    letter-spacing:-.03em;
+    background:linear-gradient(180deg,#ffffff 0%,#8fbcff 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    text-shadow:0 0 60px rgba(20,121,255,.18)}
+  .bignum-label{color:var(--muted);letter-spacing:.16em;text-transform:uppercase;font-size:.82rem;font-weight:600}
+
+  .goalbar{max-width:620px;margin:32px auto 0}
+  .goalbar .track{height:14px;border-radius:20px;background:#0d1120;border:1px solid var(--line);overflow:hidden;position:relative}
+  .goalbar .fill{height:100%;width:0;border-radius:20px;
+    background:linear-gradient(90deg,var(--blue) 0%,#37d67a 100%);
+    box-shadow:0 0 20px rgba(20,121,255,.45);transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+  .goalbar .marker{position:absolute;top:-6px;bottom:-6px;width:2px;background:#fff;opacity:.85}
+  .goalbar .marker::after{content:"2M goal";position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+    font-size:.66rem;color:#cdd6e6;white-space:nowrap;letter-spacing:.04em;font-weight:600}
+  .goalbar .cap{display:flex;justify-content:space-between;margin-top:12px;font-size:.8rem;color:var(--muted2)}
+  .pct{color:var(--green);font-weight:800}
+
+  /* ---------- STAT TILES ---------- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:44px 0 10px}
+  .stat{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);
+    border-radius:16px;padding:20px 18px;text-align:center}
+  .stat .v{font-family:var(--head);font-size:clamp(1.4rem,4vw,2rem);font-weight:800;letter-spacing:-.02em}
+  .stat .v.g{color:var(--green)} .stat .v.b{color:var(--blue2)}
+  .stat .l{color:var(--muted);font-size:.76rem;margin-top:6px;letter-spacing:.05em;text-transform:uppercase}
+  @media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+  /* ---------- SECTION HEADS ---------- */
+  section{margin-top:56px}
+  .sec-head{margin-bottom:22px}
+  .sec-head .kicker{color:var(--blue2);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:.76rem}
+  .sec-head h2{font-size:1.6rem;font-weight:800;letter-spacing:-.01em;margin-top:8px}
+  .sec-head p{color:var(--muted);margin-top:8px;max-width:720px;font-size:.96rem}
+
+  /* ---------- FLAGSHIP COLLAB ---------- */
+  .flagship{display:grid;grid-template-columns:340px 1fr;gap:30px;align-items:center;
+    background:linear-gradient(120deg,rgba(20,121,255,.16),rgba(17,20,32,.85));
+    border:1px solid #24457d;border-radius:22px;padding:28px;margin-bottom:24px;position:relative;overflow:hidden}
+  .flagship .embedbox{border-radius:14px;overflow:hidden;background:#fff;min-height:420px;
+    box-shadow:0 16px 40px rgba(0,0,0,.45)}
+  .flagship .embedbox iframe,.flagship .embedbox .instagram-media{border-radius:14px!important;margin:0!important}
+  .flagship .embedbox.isimg{background:#000;aspect-ratio:1206/1520}
+  .flagship .embedbox.iscard{background:transparent;box-shadow:none;min-height:0}
+  /* Instagram-style card replica */
+  .igcard{background:#fff;color:#111;border-radius:14px;overflow:hidden;
+    box-shadow:0 16px 40px rgba(0,0,0,.45);font-family:var(--body);width:100%}
+  .igcard .ig-head{display:flex;align-items:center;gap:10px;padding:11px 12px}
+  .igcard .ig-av{width:36px;height:36px;border-radius:50%;object-fit:cover;flex:none;background:#eee}
+  .igcard .ig-names{flex:1;min-width:0;line-height:1.25}
+  .igcard .ig-n1{font-weight:700;font-size:.84rem;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .igcard .ig-n2{font-size:.77rem;color:#737373;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .igcard .ig-vp{flex:none;background:#4f5bd5;color:#fff;font-weight:600;font-size:.8rem;
+    border-radius:8px;padding:7px 13px;text-decoration:none;white-space:nowrap}
+  .igcard .ig-media{background:#000;width:100%;line-height:0}
+  .igcard .ig-media video{width:100%;display:block;max-height:66vh;background:#000}
+  .igcard .ig-more{display:block;padding:11px 14px 2px;color:#00376b;font-weight:600;font-size:.9rem;text-decoration:none}
+  .igcard .ig-actions{display:flex;align-items:center;gap:15px;padding:9px 14px 3px}
+  .igcard .ig-actions svg{width:24px;height:24px;stroke:#111;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .igcard .ig-actions .ig-sp{flex:1}
+  .igcard .ig-likes{padding:2px 14px 4px;font-weight:700;font-size:.9rem}
+  .igcard .ig-comment{display:flex;align-items:center;padding:11px 14px 13px;
+    border-top:1px solid #efefef;margin-top:8px;color:#a1a1a1;font-size:.9rem}
+  .igcard .ig-comment .iglogo{margin-left:auto;width:22px;height:22px}
+  .flagship .poster{display:block;width:100%;height:100%;background-size:cover;background-position:center;
+    position:relative;text-decoration:none}
+  .flagship .playbtn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:66px;height:66px;border-radius:50%;background:rgba(20,121,255,.9);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 26px rgba(0,0,0,.5);transition:transform .15s,background .15s}
+  .flagship .poster:hover .playbtn{transform:translate(-50%,-50%) scale(1.08);background:var(--blue)}
+  .flagship .playbtn svg{width:30px;height:30px;margin-left:4px}
+  .flagship .badge{display:inline-flex;align-items:center;gap:7px;background:rgba(20,121,255,.16);
+    color:var(--blue2);border:1px solid rgba(20,121,255,.4);border-radius:30px;padding:6px 14px;
+    font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+  .flagship .fcamp{color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-size:.78rem;margin:16px 0 4px}
+  .flagship .fv{font-family:var(--head);font-size:clamp(2.4rem,7vw,3.6rem);font-weight:800;letter-spacing:-.03em;line-height:1;
+    background:linear-gradient(180deg,#fff,#a9cbff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .flagship .fvlabel{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
+  .flagship .blurb{color:#c5d2ea;margin:16px 0 20px;font-size:.98rem;max-width:460px}
+  @media(max-width:780px){.flagship{grid-template-columns:1fr;justify-items:center;text-align:center}
+    .flagship .blurb{margin-left:auto;margin-right:auto}.flagship .right{display:flex;flex-direction:column;align-items:center}}
+
+  /* ---------- TRIAL GRID ---------- */
+  .camp-note{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:baseline;
+    padding:14px 0 18px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .camp-note .t{font-family:var(--head);font-size:1.15rem;font-weight:700}
+  .camp-note .m{color:var(--muted);font-size:.9rem}
+  .camp-note .m b{color:var(--blue2)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:13px}
+  .card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);
+    border-radius:14px;padding:16px;transition:transform .15s,border-color .15s;
+    display:flex;flex-direction:column;gap:9px;position:relative}
+  .card:hover{transform:translateY(-3px);border-color:#2f4f86}
+  .card .rank{position:absolute;top:12px;right:14px;font-size:.72rem;color:var(--muted2);font-weight:700}
+  .card .cv{font-family:var(--head);font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
+  .card .cl{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}
+  .card.top .cv{color:var(--blue2)}
+
+  a.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;text-decoration:none;color:var(--text);
+    background:#182238;border:1px solid var(--line);border-radius:10px;
+    padding:10px 16px;font-size:.83rem;font-weight:600;transition:background .15s,border-color .15s;margin-top:auto}
+  a.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+  a.btn:hover{background:#21324f;border-color:var(--blue)}
+  a.btn.primary:hover{background:#3a90ff}
+  a.btn svg{width:15px;height:15px;flex:none}
+
+  footer{text-align:center;color:var(--muted2);font-size:.82rem;margin-top:64px;padding-top:26px;border-top:1px solid var(--line)}
+  footer .prep{color:var(--muted)}
+  footer .fmark{font-family:var(--head);font-weight:800;color:var(--blue);font-size:1.1rem;letter-spacing:-.02em;margin-bottom:6px}
+</style>
+</head>
+<body>
+<div class="wm wm-1">OneWin</div>
+<div class="wm wm-2">OneWin</div>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="lockup">
+      <span class="wordmark">OneWin</span>
+      <span class="x">× Kyle Zellner</span>
+    </div>
+    <h1>Monthly Performance <span>Report</span></h1>
+    <div class="sub" id="periodSub">Content delivery &amp; view performance</div>
+
+    <div class="bignum" id="totalViews">0</div>
+    <div class="bignum-label">Total Views Delivered</div>
+
+    <div class="goalbar">
+      <div class="track">
+        <div class="marker" id="goalMarker"></div>
+        <div class="fill" id="goalFill"></div>
+      </div>
+      <div class="cap">
+        <span>0</span>
+        <span><span class="pct" id="goalPct">0%</span> of 2M target</span>
+      </div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <!-- FLAGSHIP COLLABS -->
+  <section id="flagshipSection">
+    <div class="sec-head">
+      <div class="kicker">Selected Collaborations</div>
+      <h2>The Flagship Posts</h2>
+      <p>The hand-picked breadwinners — the strongest edits from each campaign, elevated to official OneWin collabs. Watch them right here.</p>
+    </div>
+    <div id="flagships"></div>
+  </section>
+
+  <!-- CAMPAIGNS / TRIALS -->
+  <section id="campaignsSection">
+    <div class="sec-head">
+      <div class="kicker">The Supporting Slate</div>
+      <h2>Trial Variations &amp; Additional Exposure</h2>
+      <p>The variations produced and tested alongside each flagship. Every one added reach on top of the collab — this is the volume of work behind the headline number.</p>
+    </div>
+    <div id="campaigns"></div>
+  </section>
+
+  <footer>
+    <div class="fmark">OneWin</div>
+    <div class="prep" id="prepLine">Prepared for OneWin</div>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   EDIT HERE TO UPDATE — each video: [reelURL, views]
+   Collab posts get a "blurb" and are auto-featured up top.
+   The page totals everything and builds itself.
+   ============================================================ */
+const REPORT = {
+  period: "Monthly Performance",
+  preparedFor: "Prepared for OneWin · July 2026",
+  goal: 2000000,
+  groups: [
+    {
+      name: "Campaign 1",
+      collab: {
+        url: "https://www.instagram.com/reel/Dai-UiZhkyc/",
+        views: 1318566,
+        blurb: "The top-performing edit from the Campaign 1 slate. Selected as the official OneWin collab and pushed to 1.3M+ views."
+      },
+      videos: [
+        ["https://www.instagram.com/reel/DakTcrqsBMA/", 1011156],
+        ["https://www.instagram.com/reel/Dajg46YseRH/", 747000],
+        ["https://www.instagram.com/reel/DajirwAsCNp/", 183000],
+        ["https://www.instagram.com/reel/DajR9ksM9MZ/", 121000],
+        ["https://www.instagram.com/reel/DajkaAXM8iI/", 56500],
+        ["https://www.instagram.com/reel/Dai_NlphFLc/", 33400],
+        ["https://www.instagram.com/reel/DajagTbMLbF/", 18400],
+        ["https://www.instagram.com/reel/DanNqdPMcUx/", 7243],
+        ["https://www.instagram.com/reel/DarELsnMQac/", 6645],
+        ["https://www.instagram.com/reel/DajhXFasU81/", 4958],
+        ["https://www.instagram.com/reel/DajAjM2hFyh/", 3839],
+        ["https://www.instagram.com/reel/Dai9YGUBOuU/", 3122],
+        ["https://www.instagram.com/reel/Dai__DNBSyp/", 2352],
+        ["https://www.instagram.com/reel/Dai8JnDhPpx/", 1955],
+        ["https://www.instagram.com/reel/Dai9mdSBSd1/", 1639]
+      ]
+    },
+    {
+      name: "Campaign 2",
+      collab: {
+        url: "https://www.instagram.com/reel/DZ2hzX7sHcK/",
+        views: 1115246,
+        video: "img/collab2.mp4",
+        img: "img/poster2.jpg",
+        ig: {
+          avatar: "img/kyle-avatar.png",
+          header: "kyle.zellner and 1win_extreme_",
+          audio: "Aerosmith · Dream On",
+          likes: 34400,
+          profile: "https://www.instagram.com/kyle.zellner/"
+        },
+        blurb: "The breadwinner from the Campaign 2 slate. Elevated to the official OneWin collab, clearing 1.1M+ views."
+      },
+      videos: [
+        ["https://www.instagram.com/reel/DZ2TYtSMA7m/", 947000],
+        ["https://www.instagram.com/reel/DZ5Tm6XMO6P/", 586000],
+        ["https://www.instagram.com/reel/DZ5MhOdM7M5/", 183000],
+        ["https://www.instagram.com/reel/DZ2g6N4sOvQ/", 174000],
+        ["https://www.instagram.com/reel/DZ3JeBAhUWe/", 152000],
+        ["https://www.instagram.com/reel/DZ5M1MasH4y/", 40700],
+        ["https://www.instagram.com/reel/DZ2Z06NsS-k/", 32400],
+        ["https://www.instagram.com/reel/DZ2rQEhMGFu/", 20100],
+        ["https://www.instagram.com/reel/DZ2ac8jsqDk/", 18400],
+        ["https://www.instagram.com/reel/DZ2jVRFM3yo/", 14200],
+        ["https://www.instagram.com/reel/DZ3I9M1hRh5/", 10300],
+        ["https://www.instagram.com/reel/DZ2arcKMApq/", 10100],
+        ["https://www.instagram.com/reel/DZ2vTMeMfQj/", 6352]
+      ]
+    },
+    {
+      name: "Additional OneWin Posts",
+      collab: null,
+      note: "Standalone posts created for OneWin outside the two main campaigns.",
+      videos: [
+        ["https://www.instagram.com/reel/Dacz455sbi7/", 216000],
+        ["https://www.instagram.com/reel/DaczD5ts8NQ/", 25900],
+        ["https://www.instagram.com/reel/Dabta9JsmAm/", 15000],
+        ["https://www.instagram.com/reel/Dac8tRzMI5O/", 6104],
+        ["https://www.instagram.com/reel/DadXb78Mnju/", 5715],
+        ["https://www.instagram.com/reel/DadNNGxMfgS/", 4953],
+        ["https://www.instagram.com/reel/Dac5Er2MjzN/", 3929],
+        ["https://www.instagram.com/reel/Dac7OoesC5d/", 3875],
+        ["https://www.instagram.com/reel/DadV7Fvs7M3/", 3545],
+        ["https://www.instagram.com/reel/DadNNHhs3pu/", 2144],
+        ["https://www.instagram.com/reel/Dac0_FqMCeB/", 1519]
+      ]
+    },
+    {
+      name: "Additional Stunt Content",
+      collab: null,
+      note: "Extra stunt-driven pieces produced to add reach to the campaign.",
+      videos: [
+        ["https://www.instagram.com/reel/DaF9vG0Mc2E/", 8400],
+        ["https://www.instagram.com/reel/DaF18o0M9nv/", 5400],
+        ["https://www.instagram.com/reel/DaODfZTsK0G/", 3667]
+      ]
+    }
+  ]
+};
+
+/* ---------------- helpers ---------------- */
+const fmt = n => n.toLocaleString("en-US");
+const compact = n => n>=1e6 ? (n/1e6).toFixed(2).replace(/\.?0+$/,"")+"M"
+                  : n>=1e3 ? Math.round(n/1e3)+"K" : String(n);
+function igSvg(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>';}
+
+/* ---------------- totals ---------------- */
+let grandTotal=0, count=0, over100k=0, allViews=[];
+REPORT.groups.forEach(g=>{
+  if(g.collab){grandTotal+=g.collab.views;count++;allViews.push(g.collab.views);if(g.collab.views>=1e5)over100k++;}
+  g.videos.forEach(([,v])=>{grandTotal+=v;count++;allViews.push(v);if(v>=1e5)over100k++;});
+});
+const goal=REPORT.goal, pct=Math.round(grandTotal/goal*100);
+
+/* ---------------- hero ---------------- */
+document.getElementById("periodSub").textContent = REPORT.period + " · " + count + " videos delivered";
+document.getElementById("prepLine").textContent = REPORT.preparedFor;
+const tv=document.getElementById("totalViews");
+let cur=0; const stepv=grandTotal/60;
+const ci=setInterval(()=>{cur+=stepv; if(cur>=grandTotal){cur=grandTotal;clearInterval(ci);} tv.textContent=fmt(Math.round(cur));},18);
+document.querySelector(".goalbar .cap span").textContent="0";
+document.getElementById("goalPct").textContent=pct+"%";
+setTimeout(()=>{document.getElementById("goalFill").style.width="100%";},250);
+document.getElementById("goalMarker").style.left=Math.min(100, goal/grandTotal*100)+"%";
+
+/* ---------------- stats ---------------- */
+const statsEl=document.getElementById("stats");
+[["v g",compact(grandTotal),"Total Views"],
+ ["v g",pct+"%","of 2M Goal"],
+ ["v",count,"Videos"],
+ ["v b",over100k,"Over 100K Views"]
+].forEach(([cls,v,l])=>{
+  const d=document.createElement("div");d.className="stat";
+  d.innerHTML=`<div class="${cls}">${v}</div><div class="l">${l}</div>`;
+  statsEl.appendChild(d);
+});
+
+/* ---------------- flagship collabs ---------------- */
+const flagWrap=document.getElementById("flagships");
+REPORT.groups.filter(g=>g.collab).forEach(g=>{
+  const c=g.collab;
+  const el=document.createElement("div");el.className="flagship";
+  let mediaHTML, boxcls="";
+  if(c.video && c.ig){
+    // full Instagram-style card built around the real video file
+    boxcls=" iscard";
+    const ig=c.ig;
+    mediaHTML=`
+      <div class="igcard">
+        <div class="ig-head">
+          <img class="ig-av" src="${ig.avatar}" alt="">
+          <div class="ig-names"><div class="ig-n1">${ig.header}</div><div class="ig-n2">${ig.audio}</div></div>
+          <a class="ig-vp" href="${ig.profile}" target="_blank" rel="noopener">View profile</a>
+        </div>
+        <div class="ig-media">
+          <video class="vid" src="${c.video}" poster="${c.img}" controls playsinline preload="metadata"></video>
+        </div>
+        <a class="ig-more" href="${c.url}" target="_blank" rel="noopener">View more on Instagram</a>
+        <div class="ig-actions">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.9-10-9.3C.6 8.6 2.2 5.5 5.3 5.5c1.9 0 3.2 1 3.7 2 .5-1 1.8-2 3.7-2 3.1 0 4.7 3.1 3.3 6.2C19.5 16.1 12 21 12 21z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          <span class="ig-sp"></span>
+          <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="ig-likes">${fmt(ig.likes)} likes</div>
+        <div class="ig-comment">Add a comment…
+          <svg class="iglogo" viewBox="0 0 24 24" fill="none" stroke="#c7c7c7" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#c7c7c7" stroke="none"/></svg>
+        </div>
+      </div>`;
+  } else if(c.img){
+    boxcls=" isimg";
+    mediaHTML=`<a class="poster" href="${c.url}" target="_blank" rel="noopener" style="background-image:url('${c.img}')" aria-label="Watch reel">
+         <span class="playbtn"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
+       </a>`;
+  } else {
+    mediaHTML=`<blockquote class="instagram-media" data-instgrm-permalink="${c.url}" data-instgrm-version="14"
+        style="width:100%;min-width:300px;margin:0;background:#fff;border:0;"></blockquote>`;
+  }
+  el.innerHTML=`
+    <div class="embedbox${boxcls}">${mediaHTML}</div>
+    <div class="right">
+      <span class="badge">★ Selected Collab</span>
+      <div class="fcamp">${g.name} · Official Collaboration</div>
+      <div class="fv">${fmt(c.views)}</div>
+      <div class="fvlabel">Views</div>
+      <p class="blurb">${c.blurb}</p>
+      <a class="btn primary" href="${c.url}" target="_blank" rel="noopener">${igSvg()} Watch the collab</a>
+    </div>`;
+  flagWrap.appendChild(el);
+});
+
+/* load Instagram embed script robustly (works on file:// and https) */
+function renderIGEmbeds(){
+  if(window.instgrm && window.instgrm.Embeds){ window.instgrm.Embeds.process(); return; }
+  const s=document.createElement("script");
+  s.async=true; s.src="https://www.instagram.com/embed.js";
+  s.onload=()=>{ if(window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process(); };
+  document.body.appendChild(s);
+}
+renderIGEmbeds();
+/* re-process a couple times in case the script was cached/slow */
+setTimeout(renderIGEmbeds, 1200);
+setTimeout(renderIGEmbeds, 3000);
+
+/* ---------------- campaigns / trials ---------------- */
+const campWrap=document.getElementById("campaigns");
+REPORT.groups.forEach(g=>{
+  const trials=[...g.videos].sort((a,b)=>b[1]-a[1]);
+  const trialTotal=g.videos.reduce((s,[,v])=>s+v,0);
+  const fullTotal=trialTotal+(g.collab?g.collab.views:0);
+  const sec=document.createElement("div");sec.style.marginTop="34px";
+  const collabLine = g.collab
+    ? `<span class="m">Flagship + <b>${trials.length}</b> trial variations · <b>${compact(fullTotal)}</b> total reach</span>`
+    : `<span class="m"><b>${trials.length}</b> posts · <b>${compact(fullTotal)}</b> views</span>`;
+  sec.innerHTML=`<div class="camp-note"><span class="t">${g.name}${g.collab?" — Trial Variations":""}</span>${collabLine}${g.note?`<span class="m">${g.note}</span>`:""}</div>`;
+  const grid=document.createElement("div");grid.className="grid";
+  trials.forEach(([url,v],i)=>{
+    const card=document.createElement("div");
+    card.className="card"+(v>=1e5?" top":"");
+    card.innerHTML=`<span class="rank">#${i+1}</span>
+      <div><div class="cv">${compact(v)}</div><div class="cl">views</div></div>
+      <a class="btn" href="${url}" target="_blank" rel="noopener">${igSvg()} Watch</a>`;
+    grid.appendChild(card);
+  });
+  sec.appendChild(grid);
+  campWrap.appendChild(sec);
+});
+</script>
+</body>
+</html>
