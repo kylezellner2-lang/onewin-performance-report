@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OneWin — Monthly Performance Report</title>
+<title>1win — Month One Performance Report</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
     --head:'Sora',sans-serif; --body:'Inter',sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth;overflow-x:hidden}
   body{
     background:radial-gradient(1200px 720px at 50% -220px,#0e1a33 0%,var(--bg) 55%) fixed;
     color:var(--text); font-family:var(--body);
@@ -30,6 +30,7 @@
     color:rgba(255,255,255,.035);pointer-events:none;user-select:none;z-index:0;line-height:.8}
   .wm-1{top:340px;right:-2vw;font-size:20vw}
   .wm-2{bottom:120px;left:-2vw;font-size:16vw}
+  @media(max-width:780px){.wm-1{right:0}.wm-2{left:0}}
 
   /* ---------- LOGO LOCKUP ---------- */
   .lockup{display:inline-flex;align-items:center;gap:12px;margin-bottom:22px}
@@ -61,13 +62,13 @@
   .pct{color:var(--green);font-weight:800}
 
   /* ---------- STAT TILES ---------- */
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:44px 0 10px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:44px 0 10px}
   .stat{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);
     border-radius:16px;padding:20px 18px;text-align:center}
   .stat .v{font-family:var(--head);font-size:clamp(1.4rem,4vw,2rem);font-weight:800;letter-spacing:-.02em}
   .stat .v.g{color:var(--green)} .stat .v.b{color:var(--blue2)}
   .stat .l{color:var(--muted);font-size:.76rem;margin-top:6px;letter-spacing:.05em;text-transform:uppercase}
-  @media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:680px){.stats{grid-template-columns:repeat(1,1fr)}}
 
   /* ---------- SECTION HEADS ---------- */
   section{margin-top:56px}
@@ -83,7 +84,7 @@
   .flagship .embedbox{border-radius:14px;overflow:hidden;background:#fff;min-height:420px;
     box-shadow:0 16px 40px rgba(0,0,0,.45)}
   .flagship .embedbox iframe,.flagship .embedbox .instagram-media{border-radius:14px!important;margin:0!important}
-  .flagship .embedbox.isimg{background:#000;aspect-ratio:1206/1520}
+  .flagship .embedbox.isimg{background:#000;aspect-ratio:9/16;min-height:0}
   .flagship .embedbox.iscard{background:transparent;box-shadow:none;min-height:0}
   /* Instagram-style card replica */
   .igcard{background:#fff;color:#111;border-radius:14px;overflow:hidden;
@@ -121,7 +122,8 @@
     background:linear-gradient(180deg,#fff,#a9cbff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   .flagship .fvlabel{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
   .flagship .blurb{color:#c5d2ea;margin:16px 0 20px;font-size:.98rem;max-width:460px}
-  @media(max-width:780px){.flagship{grid-template-columns:1fr;justify-items:center;text-align:center}
+  @media(max-width:780px){.flagship{grid-template-columns:1fr;justify-items:center;text-align:center;padding:22px 18px}
+    .flagship .embedbox{width:min(320px,80vw);justify-self:center}
     .flagship .blurb{margin-left:auto;margin-right:auto}.flagship .right{display:flex;flex-direction:column;align-items:center}}
 
   /* ---------- TRIAL GRID ---------- */
@@ -154,16 +156,16 @@
 </style>
 </head>
 <body>
-<div class="wm wm-1">OneWin</div>
-<div class="wm wm-2">OneWin</div>
+<div class="wm wm-1">1win</div>
+<div class="wm wm-2">1win</div>
 <div class="wrap">
 
   <header class="hero">
     <div class="lockup">
-      <span class="wordmark">OneWin</span>
+      <span class="wordmark">1win</span>
       <span class="x">× Kyle Zellner</span>
     </div>
-    <h1>Monthly Performance <span>Report</span></h1>
+    <h1>Month One Performance <span>Report</span></h1>
     <div class="sub" id="periodSub">Content delivery &amp; view performance</div>
 
     <div class="bignum" id="totalViews">0</div>
@@ -202,8 +204,8 @@
   </section>
 
   <footer>
-    <div class="fmark">OneWin</div>
-    <div class="prep" id="prepLine">Prepared for OneWin</div>
+    <div class="fmark">1win</div>
+    <div class="prep" id="prepLine">Prepared for 1win</div>
   </footer>
 </div>
 
@@ -214,16 +216,21 @@
    The page totals everything and builds itself.
    ============================================================ */
 const REPORT = {
-  period: "Monthly Performance",
-  preparedFor: "Prepared for OneWin · July 2026",
+  period: "Month One Performance",
+  preparedFor: "Prepared for 1win · Month One",
   goal: 2000000,
+  /* Trial cards link out to their reel. Flip to false to show counts only. */
+  linkTrials: true,
   groups: [
     {
       name: "Campaign 1",
       collab: {
         url: "https://www.instagram.com/reel/Dai-UiZhkyc/",
         views: 1318566,
-        blurb: "The top-performing edit from the Campaign 1 slate. Selected as the official OneWin collab and pushed to 1.3M+ views."
+        img: "img/cover-Dai-UiZhkyc.jpg",
+        badge: "★ Selected Collab",
+        role: "Official Collaboration",
+        blurb: "The top-performing edit from the Campaign 1 slate. Selected as the official 1win collab and pushed to 1.32M views on the feed."
       },
       videos: [
         ["https://www.instagram.com/reel/DakTcrqsBMA/", 1011156],
@@ -250,6 +257,8 @@ const REPORT = {
         views: 1115246,
         video: "img/collab2.mp4",
         img: "img/poster2.jpg",
+        badge: "★ Selected Collab",
+        role: "Official Collaboration",
         ig: {
           avatar: "img/kyle-avatar.png",
           header: "kyle.zellner and 1win_extreme_",
@@ -257,7 +266,7 @@ const REPORT = {
           likes: 34400,
           profile: "https://www.instagram.com/kyle.zellner/"
         },
-        blurb: "The breadwinner from the Campaign 2 slate. Elevated to the official OneWin collab, clearing 1.1M+ views."
+        blurb: "The breadwinner from the Campaign 2 slate. Elevated to the official 1win collab, clearing 1.12M views."
       },
       videos: [
         ["https://www.instagram.com/reel/DZ2TYtSMA7m/", 947000],
@@ -276,9 +285,23 @@ const REPORT = {
       ]
     },
     {
-      name: "Additional OneWin Posts",
+      name: "Campaign 3",
+      collab: {
+        url: "https://www.instagram.com/reel/DabGH8IsHBu/",
+        views: 2900000,
+        img: "img/cover-DabGH8IsHBu.jpg",
+        badge: "\u2605 Tagged Feed Post",
+        role: "Tagged Feed Post",
+        blurb: "The tagged feed post from the July 7 slate \u2014 2.9M views, the single biggest piece of Month One."
+      },
+      videos: [
+        ["https://www.instagram.com/reel/Dabt_t9M1Av/", 1600000]
+      ]
+    },
+    {
+      name: "Additional 1win Posts",
       collab: null,
-      note: "Standalone posts created for OneWin outside the two main campaigns.",
+      note: "Standalone posts created for 1win outside the two main campaigns.",
       videos: [
         ["https://www.instagram.com/reel/Dacz455sbi7/", 216000],
         ["https://www.instagram.com/reel/DaczD5ts8NQ/", 25900],
@@ -306,6 +329,9 @@ const REPORT = {
   ]
 };
 
+/* A group may carry one flagship or several — normalise to an array. */
+const collabsOf = g => !g.collab ? [] : (Array.isArray(g.collab) ? g.collab : [g.collab]);
+
 /* ---------------- helpers ---------------- */
 const fmt = n => n.toLocaleString("en-US");
 const compact = n => n>=1e6 ? (n/1e6).toFixed(2).replace(/\.?0+$/,"")+"M"
@@ -313,11 +339,12 @@ const compact = n => n>=1e6 ? (n/1e6).toFixed(2).replace(/\.?0+$/,"")+"M"
 function igSvg(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>';}
 
 /* ---------------- totals ---------------- */
-let grandTotal=0, count=0, over100k=0, allViews=[];
+let grandTotal=0, count=0, over100k=0, allViews=[], biggest=0;
 REPORT.groups.forEach(g=>{
-  if(g.collab){grandTotal+=g.collab.views;count++;allViews.push(g.collab.views);if(g.collab.views>=1e5)over100k++;}
+  collabsOf(g).forEach(c=>{grandTotal+=c.views;count++;allViews.push(c.views);if(c.views>=1e5)over100k++;});
   g.videos.forEach(([,v])=>{grandTotal+=v;count++;allViews.push(v);if(v>=1e5)over100k++;});
 });
+biggest=Math.max(...allViews);
 const goal=REPORT.goal, pct=Math.round(grandTotal/goal*100);
 
 /* ---------------- hero ---------------- */
@@ -335,8 +362,7 @@ document.getElementById("goalMarker").style.left=Math.min(100, goal/grandTotal*1
 const statsEl=document.getElementById("stats");
 [["v g",compact(grandTotal),"Total Views"],
  ["v g",pct+"%","of 2M Goal"],
- ["v",count,"Videos"],
- ["v b",over100k,"Over 100K Views"]
+ ["v",count,"Videos"]
 ].forEach(([cls,v,l])=>{
   const d=document.createElement("div");d.className="stat";
   d.innerHTML=`<div class="${cls}">${v}</div><div class="l">${l}</div>`;
@@ -345,8 +371,7 @@ const statsEl=document.getElementById("stats");
 
 /* ---------------- flagship collabs ---------------- */
 const flagWrap=document.getElementById("flagships");
-REPORT.groups.filter(g=>g.collab).forEach(g=>{
-  const c=g.collab;
+REPORT.groups.flatMap(g=>collabsOf(g).map(c=>({g,c}))).forEach(({g,c})=>{
   const el=document.createElement("div");el.className="flagship";
   let mediaHTML, boxcls="";
   if(c.video && c.ig){
@@ -378,6 +403,8 @@ REPORT.groups.filter(g=>g.collab).forEach(g=>{
       </div>`;
   } else if(c.img){
     boxcls=" isimg";
+    /* Covers come from the single-post embed page and are clean media (no burned-in
+       play glyph), so we draw our own button. */
     mediaHTML=`<a class="poster" href="${c.url}" target="_blank" rel="noopener" style="background-image:url('${c.img}')" aria-label="Watch reel">
          <span class="playbtn"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
        </a>`;
@@ -388,8 +415,8 @@ REPORT.groups.filter(g=>g.collab).forEach(g=>{
   el.innerHTML=`
     <div class="embedbox${boxcls}">${mediaHTML}</div>
     <div class="right">
-      <span class="badge">★ Selected Collab</span>
-      <div class="fcamp">${g.name} · Official Collaboration</div>
+      <span class="badge">${c.badge || "★ Selected Collab"}</span>
+      <div class="fcamp">${g.name} · ${c.role || "Official Collaboration"}</div>
       <div class="fv">${fmt(c.views)}</div>
       <div class="fvlabel">Views</div>
       <p class="blurb">${c.blurb}</p>
@@ -416,19 +443,20 @@ const campWrap=document.getElementById("campaigns");
 REPORT.groups.forEach(g=>{
   const trials=[...g.videos].sort((a,b)=>b[1]-a[1]);
   const trialTotal=g.videos.reduce((s,[,v])=>s+v,0);
-  const fullTotal=trialTotal+(g.collab?g.collab.views:0);
+  const cols=collabsOf(g);
+  const fullTotal=trialTotal+cols.reduce((s,c)=>s+c.views,0);
   const sec=document.createElement("div");sec.style.marginTop="34px";
-  const collabLine = g.collab
-    ? `<span class="m">Flagship + <b>${trials.length}</b> trial variations · <b>${compact(fullTotal)}</b> total reach</span>`
-    : `<span class="m"><b>${trials.length}</b> posts · <b>${compact(fullTotal)}</b> views</span>`;
-  sec.innerHTML=`<div class="camp-note"><span class="t">${g.name}${g.collab?" — Trial Variations":""}</span>${collabLine}${g.note?`<span class="m">${g.note}</span>`:""}</div>`;
+  const collabLine = cols.length
+    ? `<span class="m">${cols.length>1?`${cols.length} flagships`:"Flagship"} + <b>${trials.length}</b> trial variation${trials.length===1?"":"s"} · <b>${compact(fullTotal)}</b> total reach</span>`
+    : `<span class="m"><b>${trials.length}</b> post${trials.length===1?"":"s"} · <b>${compact(fullTotal)}</b> views</span>`;
+  sec.innerHTML=`<div class="camp-note"><span class="t">${g.name}${cols.length?" — Trial Variations":""}</span>${collabLine}${g.note?`<span class="m">${g.note}</span>`:""}</div>`;
   const grid=document.createElement("div");grid.className="grid";
   trials.forEach(([url,v],i)=>{
     const card=document.createElement("div");
     card.className="card"+(v>=1e5?" top":"");
     card.innerHTML=`<span class="rank">#${i+1}</span>
-      <div><div class="cv">${compact(v)}</div><div class="cl">views</div></div>
-      <a class="btn" href="${url}" target="_blank" rel="noopener">${igSvg()} Watch</a>`;
+      <div><div class="cv">${compact(v)}</div><div class="cl">views</div></div>`
+      + (REPORT.linkTrials ? `<a class="btn" href="${url}" target="_blank" rel="noopener">${igSvg()} Watch</a>` : ``);
     grid.appendChild(card);
   });
   sec.appendChild(grid);
